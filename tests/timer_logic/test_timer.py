@@ -2,7 +2,7 @@ import time
 import unittest
 
 from camera_util.camera import Camera
-from tests.card_detection.card_detector import CardDetector
+from card_detection.card_detector import CardDetector
 from timer_logic.timer import Timer
 
 
