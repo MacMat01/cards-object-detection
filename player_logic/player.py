@@ -1,4 +1,3 @@
-from card_detection.card_detector import CardDetector
 from timer_logic.timer import Timer
 
 
