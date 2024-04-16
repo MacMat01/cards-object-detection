@@ -1,4 +1,7 @@
-class CardDetector:
+from card_detection.detector import Detector
+
+
+class CardDetector(Detector):
     """
     This class represents a card that uses OpenCV for face and back detection.
     """

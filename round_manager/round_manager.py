@@ -4,6 +4,9 @@ class RoundManager:
     Each player is represented by a fruit,
     and the order of the fruits in the list represents the clockwise order of the players.
     """
+    CLOCKWISE = 1
+    CROSSWISE = 2
+    COUNTER_CLOCKWISE = 3
 
     def __init__(self):
         """
@@ -36,9 +39,9 @@ class RoundManager:
             str: The enemy's fruit.
         """
         player_fruit_index = self.fruits.index(player.fruit)
-        if round_number % 3 == 1:  # Clockwise round
+        if round_number % 3 == self.CLOCKWISE:  # Clockwise round
             enemy_fruit_index = (player_fruit_index + 1) % len(self.fruits)
-        elif round_number % 3 == 2:  # Crosswise round
+        elif round_number % 3 == self.CROSSWISE:  # Crosswise round
             enemy_fruit_index = (player_fruit_index + 2) % len(self.fruits)
         else:  # Counter-clockwise round
             enemy_fruit_index = (player_fruit_index - 1) % len(self.fruits)

@@ -11,7 +11,7 @@ class Player:
     fruit as the player is detected.
     """
 
-    def __init__(self):
+    def __init__(self, card_detector):
         """
         Initializes a new instance of the Player class.
         The fruit is initially None, indicating that the player
@@ -21,7 +21,7 @@ class Player:
         """
         self.fruit = None
         self.timer = Timer.get_running_timer()
-        self.card_detector = CardDetector()
+        self.card_detector = card_detector
 
     def set_fruit(self, fruit):
         """
