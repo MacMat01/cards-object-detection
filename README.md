@@ -9,7 +9,7 @@ This repository contains the code for a visual detection system designed for car
 - **Game analysis**: Provides insights into the game by tracking the cards played.
 
 ## Prerequisites
-- Python 3.6 or higher
+- Python 3.11 or higher
 - OpenCV library
 - A webcam or external camera
 
