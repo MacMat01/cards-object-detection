@@ -16,6 +16,7 @@ This repository contains the code for a visual detection system designed for car
 ## Installation
 To set up the project, follow these steps:
 1. Clone the repository: git clone https://github.com/your-username/visual-detection-card-game.git
+2. When inside the project, install all the dependencies with: pip install -r requirements.txt
 
 ## Contributing
 Contributions to this project are welcome. Please fork the repository and submit a pull request with your changes.
