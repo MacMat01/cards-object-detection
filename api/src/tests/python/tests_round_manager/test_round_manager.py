@@ -1,7 +1,7 @@
 ﻿import unittest
 
-from player_logic.player import Player
-from round_manager.round_manager import RoundManager
+from main.python.player_logic.player import Player
+from main.python.round_manager.round_manager import RoundManager
 
 
 class TestRoundManager(unittest.TestCase):

@@ -1,4 +1,4 @@
-from timer_logic.timer import Timer
+from main.python.timer_logic.timer import Timer
 
 
 class Player:
