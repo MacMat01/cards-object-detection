@@ -3,6 +3,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.12
-  - numpy
-  - opencv
+  - python=3.12.3
+  - numpy=1.26.4
+  - py-opencv=4.9.0
