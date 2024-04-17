@@ -1,8 +1,8 @@
 import unittest
 
-from camera_util.camera import Camera
-from card_detection.card_detector import CardDetector
-from player_logic.player import Player
+from main.python.camera_util.camera import Camera
+from main.python.card_detection.card_detector import CardDetector
+from main.python.player_logic.player import Player
 
 
 class TestPlayer(unittest.TestCase):

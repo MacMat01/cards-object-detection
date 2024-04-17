@@ -23,6 +23,8 @@ class Camera:
         The camera ID specified during the initialization of this Camera instance is used.
         """
         self.cap = cv.VideoCapture(self.camera_id)
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 1920)
+        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 1080)
 
     def is_opened(self):
         """

@@ -1,6 +1,8 @@
 ﻿import unittest
 
-from camera_util.camera import Camera
+import cv2 as cv
+
+from main.python.camera_util.camera import Camera
 
 
 class TestCamera(unittest.TestCase):
@@ -32,9 +34,22 @@ class TestCamera(unittest.TestCase):
         (ret is True) and the frame is not None.
         This is to ensure that the camera can successfully capture frames when the read_frame method is called.
         """
-        ret, frame = self.camera.read_frame()
-        self.assertTrue(ret)
-        self.assertIsNotNone(frame)
+        while True:
+            ret, frame = self.camera.read_frame()
+            self.assertTrue(ret)
+            self.assertIsNotNone(frame)
+
+            # Mirror the frame
+            frame = cv.flip(frame, 1)
+
+            # Display the frame in a window
+            cv.imshow('Camera Frame', frame)
+
+            # If the 'q' key is pressed, break the loop and stop displaying the camera feed
+            if cv.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        cv.destroyAllWindows()  # Destroy all windows created by cv.imshow()
 
     def tearDown(self):
         """

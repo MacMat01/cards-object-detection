@@ -1,9 +1,9 @@
 import time
 import unittest
 
-from camera_util.camera import Camera
-from card_detection.card_detector import CardDetector
-from timer_logic.timer import Timer
+from main.python.camera_util.camera import Camera
+from main.python.card_detection.card_detector import CardDetector
+from main.python.timer_logic.timer import Timer
 
 
 class TestTimer(unittest.TestCase):
