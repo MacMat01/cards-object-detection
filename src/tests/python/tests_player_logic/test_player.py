@@ -1,7 +1,7 @@
 import unittest
 
 from main.python.camera_util.camera import Camera
-from main.python.card_detection.card_detector import CardDetector
+from tests.python.tests_card_detection.card_detection.card_detector import CardDetector
 from main.python.player_logic.player import Player
 
 
