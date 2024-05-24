@@ -1,0 +1,21 @@
+﻿name: strategic-fruits-card-detection
+channels:
+  - defaults
+  - conda-forge
+  - anaconda
+  - nvidia
+dependencies:
+  - opendatasets
+  - ultralytics
+  - py-opencv
+  - pandas
+  - seaborn
+  - matplotlib
+  - ipykernel
+  - cudatoolkit
+  - pip
+  - pip:
+      - torch
+      - torchvision
+      - torchaudio
+      - thop
