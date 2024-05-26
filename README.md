@@ -20,6 +20,7 @@ Ensure you have the following installed on your system:
 
 - Python 3.12.3
 - Conda package manager
+- Cuda Toolkit 11.1 or higher
 
 ### Installation
 
@@ -53,6 +54,18 @@ conda activate strategic-fruits-card-detection
 python setup.py install
 ```
 
+### Running the Application
+
+To run the main application, navigate to the `src/main/python/app` directory and run the 'app.py' script:
+
+```bash
+cd src/main/python/app
+```
+
+```bash
+python app.py
+```
+
 ### Usage
 
 You can use the Jupyter Notebook for interactive data exploration and model training. Ensure you have Jupyter installed
@@ -66,4 +79,4 @@ Navigate to the `notebooks` directory and open the `strategic-fruits-card-detect
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License—see the [LICENSE](LICENSE) file for details.
