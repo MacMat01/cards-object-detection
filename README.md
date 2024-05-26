@@ -1,28 +1,82 @@
-# Visual Detection Card Game
+# Strategic Fruits Card Detection
 
-## Overview
-This repository contains the code for a visual detection system designed for card games. It uses OpenCV to capture and analyze the visual data from a card game in real-time, identifying cards and their positions.
+This project aims to detect strategic fruits cards using YOLOv8. It is implemented in Python and uses several libraries
+for data processing and model training.
 
-## Features
-- **Real-time card detection**: Utilizes the camera feed to detect and identify playing cards during a game.
-- **Card recognition**: Can recognize different cards, including their suits and ranks.
-- **Game analysis**: Provides insights into the game by tracking the cards played.
+## Project Structure
 
-## Prerequisites
-- Python 3.11 or higher
-- OpenCV library
-- A webcam or external camera
+The project has the following structure:
 
-## Installation
-To set up the project, follow these steps:
-1. Clone the repository: git clone https://github.com/your-username/visual-detection-card-game.git
-2. When inside the project, install all the dependencies with:
+- `src/main/python/model_training/strategic-fruits-card-detection-dataset/`: Contains the dataset used for training the
+  model.
+- `environment.yml`: Contains the conda environment configuration.
+- `setup.py`: Contains the setup configuration for the Python package.
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed on your system:
+
+- Python 3.12.3
+- Conda package manager
+- Cuda Toolkit 11.1 or higher
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/MacMat01/strategic-fruits-card-detection.git
 ```
-pip install -r requirements.txt
+
+1. Navigate to the project directory:
+
+```bash
+cd strategic-fruits-card-detection
 ```
 
-## Contributing
-Contributions to this project are welcome. Please fork the repository and submit a pull request with your changes.
+2. Create a new conda environment from the `environment.yml` file:
+
+```bash
+conda env create -f environment.yml
+```
+
+3. Activate the conda environment:
+
+```bash
+conda activate strategic-fruits-card-detection
+```
+
+4. Install the Python package:
+
+```bash
+python setup.py install
+```
+
+### Running the Application
+
+To run the main application, navigate to the `src/main/python/app` directory and run the 'app.py' script:
+
+```bash
+cd src/main/python/app
+```
+
+```bash
+python app.py
+```
+
+### Usage
+
+You can use the Jupyter Notebook for interactive data exploration and model training. Ensure you have Jupyter installed
+in your environment, and start it with:
+
+```bash
+jupyter notebook
+```
+
+Navigate to the `notebooks` directory and open the `strategic-fruits-card-detection.ipynb` notebook.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+This project is licensed under the MIT License—see the [LICENSE](LICENSE) file for details.
