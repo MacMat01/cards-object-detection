@@ -4,6 +4,7 @@ channels:
   - conda-forge
   - anaconda
   - nvidia
+  - pytorch
 dependencies:
   - opendatasets
   - ultralytics
@@ -12,7 +13,10 @@ dependencies:
   - seaborn
   - matplotlib
   - ipykernel
-  - cudatoolkit
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
   - pip
   - pip:
       - torch
