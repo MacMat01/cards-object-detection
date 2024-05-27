@@ -54,7 +54,7 @@ conda activate strategic-fruits-card-detection
 python setup.py install
 ```
 
-5. If gpu isn't working for model training, install pytorch-cuda manually:
+5. If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
 
 ```bash
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
