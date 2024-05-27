@@ -17,9 +17,3 @@ dependencies:
   - torchvision
   - torchaudio
   - pytorch-cuda=12.1
-  - pip
-  - pip:
-      - torch
-      - torchvision
-      - torchaudio
-      - thop
