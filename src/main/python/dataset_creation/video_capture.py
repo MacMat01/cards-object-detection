@@ -25,10 +25,11 @@ while True:
         cv2.imshow('frame', frame)
         key = cv2.waitKey(1) & 0xFF
         if key == ord('s'):  # Premi 's' per iniziare la registrazione
+            print(f"Registrazione del video {video_counter} in corso...")
             out = cv2.VideoWriter('data/video/output{}.mp4'.format(video_counter), fourcc, 20.0,
                                   (1280, 720))  # Modifica l'estensione del file a .mp4
             start_time = time.time()
-            while (int(time.time() - start_time) < 30):
+            while (int(time.time() - start_time) < 20):
                 ret, frame = cap.read()
                 if ret == True:
                     # scrivi il frame nel file di output

@@ -5,7 +5,7 @@ from functions import give_me_filename
 
 
 # extract a card from a video frame
-def extract_cards_from_video(video_fn, output_dir=None, keep_ratio=5, min_focus=30, debug=False):
+def extract_cards_from_video(video_fn, output_dir=None, keep_ratio=3, min_focus=20, debug=False):
     """
         Extract cards from media file 'video_fn' 
         If 'output_dir' is specified, the cards are saved in 'output_dir'.
