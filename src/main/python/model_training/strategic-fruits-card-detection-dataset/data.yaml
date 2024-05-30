@@ -1,7 +1,0 @@
-
-train: C:\Users\macma\PycharmProjects\strategic-fruits-card-detection\src\main\python\model_training\strategic-fruits-card-detection-dataset/train/images
-val: C:\Users\macma\PycharmProjects\strategic-fruits-card-detection\src\main\python\model_training\strategic-fruits-card-detection-dataset/val/images
-test: C:\Users\macma\PycharmProjects\strategic-fruits-card-detection\src\main\python\model_training\strategic-fruits-card-detection-dataset/test/images
-
-nc: 4
-names: ['2b', '4b', '2p', '4p']
