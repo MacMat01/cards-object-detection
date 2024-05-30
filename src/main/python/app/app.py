@@ -1,11 +1,14 @@
 ﻿import cv2
+import os
 from ultralytics import YOLO
 
 # TODO 1: test this code with the camera
 # TODO 2: test this code with a video file
 
+os.chdir("../../../../../../Desktop/src/main/python")
+
 # Load the trained YOLO model
-model = YOLO('weights/best.pt')
+model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
 
 # Start capturing video
 cap = cv2.VideoCapture(0)  # 0 for the default camera
