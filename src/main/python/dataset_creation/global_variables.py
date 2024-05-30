@@ -10,11 +10,8 @@ if not os.path.isdir(data_dir):
     os.makedirs(data_dir)
 
 #TODO modificare suits e values in base alle esigenze
-card_suits = ['b', 'p']
-card_values = ['2', '4']
-
-# card_suits=['a','p','o','b']
-# card_values=['1','2','3','4','5']
+card_suits = ['a', 'p', 'o', 'b']
+card_values = ['1', '2', '3', '4', '5']
 
 #TODO modificare dataset_name in base alle esigenze
 dataset_name = "strategic-fruits-card-detection-dataset"
