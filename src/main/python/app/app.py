@@ -5,7 +5,7 @@ from ultralytics import YOLO
 # TODO 1: test this code with the camera
 # TODO 2: test this code with a video file
 
-os.chdir("../../../../../../Desktop/src/main/python")
+os.chdir("..")
 
 # Load the trained YOLO model
 model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
