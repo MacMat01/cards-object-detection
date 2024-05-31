@@ -9,7 +9,7 @@ from card_measures import *
 # Scenario with 2 cards:
 # The original image of a card has the shape (cardH,cardW,4)
 # We first paste it in a zero image of shape (imgH,imgW,4) at position decalX, decalY
-# so that the original image is centerd in the zero image
+# so that the original image is centered in the zero image
 decalX = int((imgW - cardW) / 2)
 decalY = int((imgH - cardH) / 2)
 
