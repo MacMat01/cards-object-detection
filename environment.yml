@@ -21,3 +21,4 @@ dependencies:
   - imgaug
   - tqdm
   - pip
+  - requests
