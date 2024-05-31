@@ -10,7 +10,6 @@ The project has the following structure:
 - `src/main/python/model_training/strategic-fruits-card-detection-dataset/`: Contains the dataset used for training the
   model.
 - `environment.yml`: Contains the conda environment configuration.
-- `setup.py`: Contains the setup configuration for the Python package.
 
 ## Getting Started
 
@@ -39,22 +38,33 @@ cd strategic-fruits-card-detection
 2. Create a new conda environment from the `environment.yml` file:
 
 ```bash
-conda env create -f environment.yml
+conda env create --name <your-environment-name> -f environment.yml
 ```
 
 3. Activate the conda environment:
 
 ```bash
-conda activate strategic-fruits-card-detection
+conda activate <your-environment-name>
 ```
 
-4. Install the Python package:
+4. Install the `build` and `pip` tools:
+```bash
+pip install --upgrade build pip
+```
+
+5. Build a source distribution (sdist) and a binary distribution (wheel) of your package:
 
 ```bash
-python setup.py install
+python -m build
 ```
 
-5. If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
+6. Install the package from the wheel file:
+
+```bash
+pip install dist/*.whl # If it doesn't work, in my case the specific command was pip install dist/strategic_fruits_card_detection-0.1.0-py3-none-any.whl 
+```
+
+7. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
 
 ```bash
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -62,7 +72,9 @@ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvi
 
 ### Running the Application
 
-To run the main application, navigate to the `src/main/python/app` directory and run the 'app.py' script:
+#### For Using the Main Application
+
+To run the main application, navigate to the `src/main/python/app` directory and run the `app.py` script:
 
 ```bash
 cd src/main/python/app
@@ -72,16 +84,21 @@ cd src/main/python/app
 python app.py
 ```
 
-### Usage
+#### For Creating Your Own Card Detection
 
-You can use the Jupyter Notebook for interactive data exploration and model training. Ensure you have Jupyter installed
-in your environment, and start it with:
+Follow the instruction in the following Jupyter notebooks:
+
+1. `Cards Extraction.ipynb`
+2. `Dataset Creation.ipynb`
+3. `Strategic Fruits Card Detection - YOLOv8.ipynb`
+
+Ensure you have Jupyter installed in your environment, and start it with:
 
 ```bash
 jupyter notebook
 ```
 
-Navigate to the `notebooks` directory and open the `strategic-fruits-card-detection.ipynb` notebook.
+Navigate to the `notebooks` directory and open the respective notebook.
 
 ## License
 
