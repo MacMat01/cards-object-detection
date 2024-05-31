@@ -1,6 +1,6 @@
 ﻿from setuptools import setup, find_packages
 
-setup(name='strategic-fruits-card-detection', version='0.1.0',
+setup(name='strategic-fruits-card-detection', version='0.1.1-alpha', license='MIT',
     description='A project for detecting strategic fruits cards using YOLOv8', author='MacMat01, SenseiBonsai2k',
     author_email='matteo.machella01@gmail.com, cristian.marinozzi1@gmail.com',
     url='https://github.com/MacMat01/strategic-fruits-card-detection', packages=find_packages(),
