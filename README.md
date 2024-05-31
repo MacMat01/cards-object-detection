@@ -40,13 +40,13 @@ cd strategic-fruits-card-detection
 3. Create a new conda environment from the `environment.yml` file:
 
 ```bash
-conda env create --name <your-environment-name> -f environment.yml
+conda env create --name strategic-fruits-card-detection -f environment.yml # Change <strategic-fruits-card-detection> to your desired environment name
 ```
 
 4. Activate the conda environment:
 
 ```bash
-conda activate <your-environment-name>
+conda activate strategic-fruits-card-detection # Change <strategic-fruits-card-detection> to your desired environment name
 ```
 
 5. Install the `build` and `pip` tools:
@@ -64,13 +64,7 @@ python -m build
 7. Install the package from the wheel file:
 
 ```bash
-pip install dist/*.whl # If it doesn't work, in my case the specific command was "pip install dist/strategic_fruits_card_detection-0.1.0-py3-none-any.whl"
-```
-
-8. (OPTIONAL) If something is wrong with the previous step due to permission, try to run this command instead:
-
-```bash
-pip install --user <name-of-your-package> # In my case it was "pip install --user strategic_fruits_card_detection"
+pip install --user strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl # Change <strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl> to the name of the wheel file generated in step 6
 ```
 
 8. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
