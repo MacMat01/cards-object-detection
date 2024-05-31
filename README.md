@@ -31,42 +31,49 @@ Ensure you have the following installed on your system:
 git clone https://github.com/MacMat01/strategic-fruits-card-detection.git
 ```
 
-1. Navigate to the project directory:
+2. Navigate to the project directory:
 
 ```bash
 cd strategic-fruits-card-detection
 ```
 
-2. Create a new conda environment from the `environment.yml` file:
+3. Create a new conda environment from the `environment.yml` file:
 
 ```bash
 conda env create --name <your-environment-name> -f environment.yml
 ```
 
-3. Activate the conda environment:
+4. Activate the conda environment:
 
 ```bash
 conda activate <your-environment-name>
 ```
 
-4. Install the `build` and `pip` tools:
+5. Install the `build` and `pip` tools:
+
 ```bash
 pip install --upgrade build pip
 ```
 
-5. Build a source distribution (sdist) and a binary distribution (wheel) of your package:
+6. Build a source distribution (sdist) and a binary distribution (wheel) of your package:
 
 ```bash
 python -m build
 ```
 
-6. Install the package from the wheel file:
+7. Install the package from the wheel file:
 
 ```bash
-pip install dist/*.whl # If it doesn't work, in my case the specific command was pip install dist/strategic_fruits_card_detection-0.1.0-py3-none-any.whl 
+pip install dist/*.whl # If it doesn't work, in my case the specific command was "pip install dist/strategic_fruits_card_detection-0.1.0-py3-none-any.whl"
 ```
 
-7. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
+8. (OPTIONAL) If something is wrong with the previous step due to permission, try to run this command instead:
+
+```bash
+pip install --user <name-of-your-package> # In my case it was "pip install --user strategic_fruits_card_detection"
+```
+
+8. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
 
 ```bash
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
