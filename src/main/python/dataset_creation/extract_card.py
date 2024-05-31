@@ -1,16 +1,13 @@
-﻿import os
-
-from alphamask_layer import *
+﻿from alphamask_layer import *
 from functions import give_me_filename
 
 
-# extract a card from a video frame
-def extract_cards_from_video(video_fn, output_dir=None, keep_ratio=3, min_focus=20, debug=False):
+def extract_cards_from_video(video_fn, output_dir=None, keep_ratio=3, min_focus=20, debug=False, limit=None):
     """
-        Extract cards from media file 'video_fn' 
+        Extract cards from media file 'video_fn'
         If 'output_dir' is specified, the cards are saved in 'output_dir'.
         One file per card with a random file name
-        Because 2 consecutives frames are probably very similar, we don't use every frame of the video, 
+        Because 2 consecutives frames are probably very similar, we don't use every frame of the video,
         but only one every 'keep_ratio' frames
 
         Returns list of extracted images
@@ -40,6 +37,8 @@ def extract_cards_from_video(video_fn, output_dir=None, keep_ratio=3, min_focus=
                 if k == 27: break
             if valid:
                 imgs_list.append(card_img)
+                if limit is not None and len(imgs_list) >= limit:
+                    break
         frame_nb += 1
 
     if debug:
