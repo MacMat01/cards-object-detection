@@ -4,6 +4,7 @@ from shapely.geometry import Polygon
 
 from create_voc import *
 from functions import *
+from card_measures import *
 
 # Scenario with 2 cards:
 # The original image of a card has the shape (cardH,cardW,4)
@@ -14,8 +15,7 @@ decalY = int((imgH - cardH) / 2)
 
 # Scenario with 3 cards : decal values are different
 decalX3 = int(imgW / 2)
-decalY3 = int(imgH / 2 - cardH)
-
+decalY3 = int(imgH / 2 - cardH / 2)
 
 def kps_to_polygon(kps):
     """
@@ -64,7 +64,7 @@ cardKP = ia.KeypointsOnImage([
 transform_1card = iaa.Sequential([
     iaa.Affine(scale=[0.65, 1]),
     iaa.Affine(rotate=(-180, 180)),
-    iaa.Affine(translate_percent={"x": (-0.25, 0.25), "y": (-0.25, 0.25)}),
+    iaa.Affine(translate_percent={"x": (-0.35, 0.35), "y": (-0.35, 0.35)}),
 ])
 
 # For the 3 cards scenario, we use 3 imgaug transforms, the first 2 are for individual cards, 
@@ -81,7 +81,7 @@ transform_3cards = iaa.Sequential([
     iaa.Affine(translate_px={"x": decalX - decalX3, "y": decalY - decalY3}),
     iaa.Affine(scale=[0.65, 1]),
     iaa.Affine(rotate=(-180, 180)),
-    iaa.Affine(translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)})
+    iaa.Affine(translate_percent={"x": (-0.4, 0.4), "y": (-0.4, 0.4)})
 ])
 
 # imgaug transformation for the background
