@@ -15,12 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Environment
-        run: |
-          echo "CONDA_SUBDIR=classic" >> $GITHUB_ENV
-          conda update -n base -c defaults conda
-          echo $CONDA/bin >> $GITHUB_PATH
-          conda env update --file environment.yml --name base
+#      - name: Setup Environment
+#        run: |
+#          echo "CONDA_SUBDIR=classic" >> $GITHUB_ENV
+#          conda update -n base -c defaults conda
+#          echo $CONDA/bin >> $GITHUB_PATH
+#          conda env update --file environment.yml --name base
 
       - name: List egg-info contents
         run: ls strategic_fruits_card_detection.egg-info
