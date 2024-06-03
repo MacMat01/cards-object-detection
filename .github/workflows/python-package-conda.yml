@@ -8,7 +8,6 @@ on:
     branches:
       - master
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,6 +17,7 @@ jobs:
 
       - name: Setup Environment
         run: |
+          echo "CONDA_SUBDIR=classic" >> $GITHUB_ENV
           conda update -n base -c defaults conda
           echo $CONDA/bin >> $GITHUB_PATH
           conda env update --file environment.yml --name base
@@ -26,6 +26,12 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.12.3'
+
+      - name: Build and Install Package
+        run: |
+          pip install --upgrade build pip
+          python -m build
+          pip install dist/strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl
 
       - name: Lint and Test
         run: |
