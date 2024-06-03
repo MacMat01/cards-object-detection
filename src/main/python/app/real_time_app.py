@@ -13,8 +13,6 @@ model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
 # Start capturing video
 cap = cv2.VideoCapture(0)  # 0 for the default camera
 
-# # Open the video file # cap = cv2.VideoCapture('path_to_video')  # replace 'path_to_video' with the path to the video file
-
 # Set the frame width and height
 cap.set(3, 1920)  # Width
 cap.set(4, 1080)  # Height

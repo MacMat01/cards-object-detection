@@ -82,7 +82,8 @@ cd src/main/python/app
 ```
 
 ```bash
-python app.py
+python real_time_app.py
+python on_demand_app.py
 ```
 
 #### For Creating Your Own Card Detection
