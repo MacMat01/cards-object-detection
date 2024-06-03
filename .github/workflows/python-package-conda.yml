@@ -31,7 +31,7 @@ jobs:
         run: |
           pip install --upgrade build pip
           python -m build
-          pip install dist/strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl
+          pip install dist/*.whl
 
       - name: Lint and Test
         run: |
