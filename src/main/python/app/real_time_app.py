@@ -1,9 +1,10 @@
-﻿import cv2
-import os
+﻿import os
+
+import cv2
+from pyzbar.pyzbar import decode
 from ultralytics import YOLO
 
-# TODO 1: test this code with the camera
-# TODO 2: test this code with a video file
+# TODO: Test QR Code Functionality
 
 os.chdir("..")
 
@@ -14,8 +15,8 @@ model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
 cap = cv2.VideoCapture(0)  # 0 for the default camera
 
 # Set the frame width and height
-cap.set(3, 1920)  # Width
-cap.set(4, 1080)  # Height
+cap.set(3, 1280)  # Width
+cap.set(4, 720)  # Height
 
 while True:
     # Read a frame from the camera
@@ -28,6 +29,12 @@ while True:
 
     # Draw bounding boxes and labels on the detections
     detect_image = detect_result[0].plot()
+
+    # Decode the QR code from the frame
+    decoded_objects = decode(frame)
+    for obj in decoded_objects:
+        print("Type:", obj.type)
+        print("Data:", obj.data.decode("utf-8"), "\n")
 
     # Display the frame
     cv2.imshow('Card Detection', detect_image)
