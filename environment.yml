@@ -20,5 +20,6 @@ dependencies:
   - pytorch-cuda=12.1 # Restart may be required
   - imgaug
   - tqdm
-  - pip
   - requests
+  - pyzbar
+  - pip
