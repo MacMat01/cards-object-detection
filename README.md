@@ -64,7 +64,7 @@ python -m build
 7. Install the package from the wheel file:
 
 ```bash
-pip install --user strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl # Change <strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl> to the name of the wheel file generated in step 6
+pip install --user dist/*.whl # If it doesn't works, change <*.whl> to the name of the wheel file generated in step 6
 ```
 
 8. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
