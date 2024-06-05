@@ -18,7 +18,7 @@ The project has the following structure:
 Ensure you have the following installed on your system:
 
 - Python 3.12.3
-- Conda package manager
+- [Conda package manager](https://www.anaconda.com/download)
 - Cuda Toolkit 11.1 or higher
 
 ### Installation
@@ -38,13 +38,13 @@ cd strategic-fruits-card-detection
 3. Create a new conda environment from the `environment.yml` file:
 
 ```bash
-conda env create --name strategic-fruits-card-detection -f environment.yml # Change <strategic-fruits-card-detection> to your desired environment name
+conda env create --name cards-object-detection -f environment.yml
 ```
 
 4. Activate the conda environment:
 
 ```bash
-conda activate strategic-fruits-card-detection # Change <strategic-fruits-card-detection> to your desired environment name
+conda activate cards-object-detection
 ```
 
 5. Install the `build` and `pip` tools:
@@ -62,7 +62,7 @@ python -m build
 7. Install the package from the wheel file:
 
 ```bash
-pip install --user strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl # Change <strategic_fruits_card_detection-0.1.1a0-py3-none-any.whl> to the name of the wheel file generated in step 6
+pip install --user dist/*.whl # If it doesn't work, change </*.whl> to the name of the wheel file generated in step 6
 ```
 
 8. (OPTIONAL) If gpu isn't working for model training, install pytorch-cuda manually (remember to restart pc, it often works):
