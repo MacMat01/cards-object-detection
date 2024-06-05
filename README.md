@@ -17,9 +17,10 @@ The project has the following structure:
 
 Ensure you have the following installed on your system:
 
-- Python 3.12.3
+- [Python](https://www.python.org/downloads/) 3.12.3
 - [Conda package manager](https://www.anaconda.com/download)
-- Cuda Toolkit 11.1 or higher
+- [Cuda Toolkit](https://developer.nvidia.com/cuda-toolkit-archive) 12.3
+- Suggested IDE: [Pycharm Community Edition](https://www.jetbrains.com/pycharm/download/?section=windows)
 
 ### Installation
 
