@@ -1,0 +1,49 @@
+# This is a GitHub Actions workflow file named "CodeQL".
+# It is designed to perform CodeQL analysis on your Python project.
+# CodeQL is a semantic code analysis engine, used mostly for detecting vulnerabilities across a codebase.
+name: "CodeQL"
+
+# The workflow is triggered by three events:
+# 1. A push to "master" branch
+# 2. A pull request to "master" branch
+# 3. A scheduled event that runs every Friday at 10:44 UTC
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    - cron: '44 10 * * 5'
+
+jobs:
+  analyze: # The job is named "Analyze (Python)" and runs on the latest version of Ubuntu.
+    # It has a timeout limit of 360 minutes.
+    name: Analyze (Python)
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    # The job requires certain permissions to run:
+    # 1. Write access to security events
+    # 2. Read access to packages, actions, and contents
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps: # The first step checks out the code using the "actions/checkout@v4" action.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # The next step initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with: # The language to be analyzed is Python.
+          languages: python
+          # The build mode is set to "none" as Python is an interpreted language and doesn't require building.
+          build-mode: none
+
+      # The final step performs the CodeQL Analysis.
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with: # The category is set to "/language:python" to specifically focus on Python.
+          category: "/language:python"
