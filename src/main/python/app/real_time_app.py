@@ -1,9 +1,7 @@
-﻿import cv2
-import os
-from ultralytics import YOLO
+﻿import os
 
-# TODO 1: test this code with the camera
-# TODO 2: test this code with a video file
+import cv2
+from ultralytics import YOLO
 
 os.chdir("..")
 

@@ -5,39 +5,39 @@ from ultralytics import YOLO
 
 os.chdir("..")
 
-# Percorso del modello YOLO addestrato
+# Path of the trained YOLO model
 model_path = 'model_training/runs/detect/yolov8n_custom/weights/best.pt'
 
-# Percorso del video MKV
+# Path of the MKV video
 video_path = 'app/videos/video.mp4'
 
-# Carica il modello YOLO
+# Upload YOLO model
 model = YOLO(model_path)
 
-# Apri il video
+# Open video
 cap = cv2.VideoCapture(video_path)
 
 while True:
-    # Leggi un frame dal video
+    # Read a frame from the video
     ret, frame = cap.read()
     if not ret:
         break
 
-    # Applica il modello YOLO per rilevare gli oggetti nel frame
+    # Applies the YOLO model to detect objects in the frame
     detect_result = model(frame)
 
-    # Disegna i riquadri di delimitazione e le etichette sulle rilevazioni
+    # Draw bounding boxes and labels on the surveys
     detect_image = detect_result[0].plot()
 
-    # Mostra il frame
+    # Show the frame
     cv2.imshow('Object Detection', detect_image)
 
-    # Interrompi il ciclo se viene premuto 'q'
+    # Interrupt the loop if 'q' is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Rilascia l'oggetto di cattura video
+# Release the video capture object
 cap.release()
 
-# Chiudi tutte le finestre di OpenCV
+# Close all OpenCV windows
 cv2.destroyAllWindows()
