@@ -1,4 +1,4 @@
-﻿name: strategic-fruits-card-detection
+﻿name: cards-object- detection
 channels:
   - defaults
   - conda-forge
