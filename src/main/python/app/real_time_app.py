@@ -1,50 +1,42 @@
 ﻿import os
-
 import cv2
 from pyzbar.pyzbar import decode
 from ultralytics import YOLO
 
-# TODO: Test QR Code Functionality
-
-os.chdir("..")
-
-# Load the trained YOLO model
-model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
-
-# Start capturing video
-cap = cv2.VideoCapture(0)  # 0 for the default camera
-
-# Set the frame width and height
-cap.set(3, 1280)  # Width
-cap.set(4, 720)  # Height
-
-while True:
-    # Read a frame from the camera
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    # Apply the YOLO model to detect cards in the frame
-    detect_result = model(frame)
-
-    # Draw bounding boxes and labels on the detections
-    detect_image = detect_result[0].plot()
-
-    # Decode the QR code from the frame
+def detect_players(frame):
     decoded_objects = decode(frame)
+    players = []
     for obj in decoded_objects:
-        print("Type:", obj.type)
-        print("Data:", obj.data.decode("utf-8"), "\n")
+        player = obj.data.decode("utf-8").split(" ")[0]
+        players.append(player)
+    return players
 
-    # Display the frame
-    cv2.imshow('Card Detection', detect_image)
+def main():
+    os.chdir("..")
+    model = YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
+    cap = cv2.VideoCapture(1)
+    cap.set(3, 1280)
+    cap.set(4, 720)
 
-    # Break the loop if 'q' is pressed
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-# Release the video capture object
-cap.release()
+        detect_result = model(frame)
+        detect_image = detect_result[0].plot()
 
-# Close all OpenCV windows
-cv2.destroyAllWindows()
+        players = detect_players(frame)
+        for player in players:
+            print(player + " has played a card.")
+
+        cv2.imshow('Card Detection', detect_image)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+# Usage
+main()
