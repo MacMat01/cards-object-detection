@@ -1,4 +1,4 @@
-﻿name: cards-object- detection
+﻿name: cards-object-detection
 channels:
   - defaults
   - conda-forge
