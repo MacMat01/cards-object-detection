@@ -7,9 +7,14 @@ for data processing and model training.
 
 The project has the following structure:
 
-- `src/main/python/model_training/strategic-fruits-card-detection-dataset/`: Contains the dataset used for training the
-  model.
+- `src/`: Contains the source code of the project.
+  - `main/python/`: Contains the Python scripts for the project.
+    - `app/`: Contains the scripts for the real-time application.
+    - `dataset_creation/`: Contains the scripts for creating the dataset.
+    - `model_training/`: Contains the scripts for training the YOLOv8 model.
 - `environment.yml`: Contains the conda environment configuration.
+- `setup.py`: Contains the setup configuration for the Python package.
+- `README.md`: Provides an overview of the project and instructions for installation and usage.
 
 ## Getting Started
 
@@ -83,7 +88,7 @@ cd src/main/python/app
 
 ```bash
 python real_time_app.py
-python on_demand_app.py
+python video_app.py
 ```
 
 #### For Creating Your Own Card Detection
