@@ -12,12 +12,12 @@ client = InfluxDBClient(url=url, token=token, org=org)
 query_api = client.query_api()
 
 # Define the Flux query
-query = 'from(bucket: "StrategicFruitsData") |> range(start: -2m) |> filter(fn: (r) => r._measurement == "thinking_time")'
+query = 'from(bucket: "StrategicFruitsData") |> range(start: -2m) |> filter(fn: (r) => r._measurement == "thinking_time" or r._measurement == "card_played")'
 
 # Execute the query and get the result tables
 tables = query_api.query(query, org=org)
 
-# Print the player names and their thinking times
+# Print the player names, and their thinking times
 for table in tables:
     for record in table.records:
         player = record.values["player"]

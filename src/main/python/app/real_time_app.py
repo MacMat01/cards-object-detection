@@ -74,23 +74,6 @@ def process_qrcode(write_api, qrcodes_set, script_start_time, detected_qrcodes):
             write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point)
 
 
-def process_card(write_api, cards_set, detected_cards):
-    """
-    Process the detected cards.
-
-    Args:
-        write_api (influxdb_client.write_api.WriteApi): The write API of the InfluxDB client.
-        cards_set (set): A set of already detected cards.
-        detected_cards (list): A list of detected cards.
-    """
-    for card in detected_cards:
-        if card not in cards_set:
-            cards_set.add(card)
-            print(f"{card} has been played.")
-            point = Point("card_played").tag("card", card)
-            write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point)
-
-
 def main():
     """
     The main function of the application.
@@ -100,18 +83,28 @@ def main():
     model = initialize_yolo_model()
     script_start_time = time.time()
     qrcodes_set = set()
-    cards_set = set()
+    detected_cards_set = set()
 
     while True:
         ret, frame = cap.read()
         if not ret:
             break
 
-        detect_image = model(frame)[0].plot()
+        detect_result = model(frame)
+        detected_cards_indices = detect_result[0].boxes.cls.tolist()
+        detected_cards = [detect_result[0].names[i] for i in detected_cards_indices]
+
+        detect_image = detect_result[0].plot()
         detected_qrcodes = detect_players(frame)
         process_qrcode(write_api, qrcodes_set, script_start_time, detected_qrcodes)
 
-        process_card(write_api, cards_set, detect_image)
+        # Check if the card '2p' was detected and if it was not detected before
+        if '2p' in detected_cards and '2p' not in detected_cards_set:
+            detected_cards_set.add('2p')
+            elapsed_time = time.time() - script_start_time
+            print(f"Card '2p' has been detected after {elapsed_time} seconds.")
+            point = Point("card_detection").tag("card", '2p').field("elapsed_time", elapsed_time)
+            write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point)
 
         cv2.imshow('Card Detection', detect_image)
         if cv2.waitKey(1) & 0xFF == ord('q'):
