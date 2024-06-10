@@ -3,32 +3,26 @@
 from influxdb_client import InfluxDBClient
 
 
-def execute_query(query_api, query, measurement):
-    tables = query_api.query(query, org="Cris&Matt")
-    for table in tables:
-        for record in table.records:
-            if measurement == "thinking_time":
-                print(f"{record.values.get('player')} has played after {record.values.get('_value')} seconds")
-            elif measurement == "card_detection":
-                print(f"{record.values.get('_value')} was played")
+class QueryAPI:
+    def __init__(self):
+        self.client = InfluxDBClient(url="http://localhost:8086", token=os.getenv("INFLUXDB_TOKEN"), org="Cris&Matt")
+        self.query_api = self.client.query_api()
+
+    def execute_query(self, query):
+        tables = self.query_api.query(query, org="Cris&Matt")
+        for table in tables:
+            for record in table.records:
+                if record.values.get("_measurement") == "thinking_time":
+                    player = record.values["player"]
+                    thinking_time = record.get_value()
+                    print(f"Player: {player}, Thinking Time: {thinking_time}")
+                elif record.values.get("_measurement") == "card_detection":
+                    card = record.values["card"]
+                    elapsed_time = record.get_value()
+                    print(f"Card: {card}, Detected after: {elapsed_time} seconds")
 
 
-client = InfluxDBClient(url="http://localhost:8086", token=os.getenv("INFLUXDB_TOKEN"), org="Cris&Matt")
-query_api = client.query_api()
-
-query_thinking_time = '''
-from(bucket: "StrategicFruitsData")
-  |> range(start: -2m)
-  |> filter(fn: (r) => r._measurement == "thinking_time")
-  |> map(fn: (r) => ({ r with _value: r._time, player: r.player }))
-'''
-
-query_card_detection = '''
-from(bucket: "StrategicFruitsData")
-  |> range(start: -2m)
-  |> filter(fn: (r) => r._measurement == "card_detection")
-  |> map(fn: (r) => ({ r with _value: r.card_detection }))
-'''
-
-execute_query(query_api, query_thinking_time, "thinking_time")
-execute_query(query_api, query_card_detection, "card_detection")
+if __name__ == "__main__":
+    query = 'from(bucket: "StrategicFruitsData") |> range(start: -2m) |> filter(fn: (r) => r._measurement == "thinking_time" or r._measurement == "card_detection")'
+    api = QueryAPI()
+    api.execute_query(query)
