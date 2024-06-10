@@ -19,7 +19,7 @@ class QueryAPI:
                 elif record.values.get("_measurement") == "card_detection":
                     card = record.values["card"]
                     elapsed_time = record.get_value()
-                    print(f"Card: {card}, Detected after: {elapsed_time} seconds")
+                    print(f"Card: {card}")
 
 
 if __name__ == "__main__":
