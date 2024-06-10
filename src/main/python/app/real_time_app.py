@@ -7,7 +7,9 @@ from pyzbar.pyzbar import decode
 from ultralytics import YOLO
 
 
+# The RealTimeApp class is responsible for initializing and running the real-time card detection application.
 class RealTimeApp:
+    # The constructor initializes the necessary attributes and methods for the application.
     def __init__(self):
         self.last_detected_card = None
         self.cards_set = ['1a', '2a', '3a', '4a', '5a', '1b', '2b', '3b', '4b', '5b', '1o', '2o', '3o', '4o', '5o',
@@ -19,11 +21,13 @@ class RealTimeApp:
         self.qrcodes_set = set()
         self.detected_cards_set = set()
 
+    # This method initializes the InfluxDB client and returns the write API.
     @staticmethod
     def initialize_influxdb():
         client = InfluxDBClient(url="http://localhost:8086", token=os.getenv("INFLUXDB_TOKEN"), org="Cris&Matt")
         return client.write_api()
 
+    # This method initializes the video capture object and sets the resolution.
     @staticmethod
     def initialize_video_capture():
         cap = cv2.VideoCapture(0)
@@ -31,15 +35,18 @@ class RealTimeApp:
         cap.set(4, 720)
         return cap
 
+    # This method initializes the YOLO model for object detection.
     @staticmethod
     def initialize_yolo_model():
         os.chdir('..')
         return YOLO('model_training/runs/detect/yolov8n_custom/weights/best.pt')
 
+    # This method decodes the QR codes in the given frame and returns the player names.
     @staticmethod
     def detect_players(frame):
         return [obj.data.decode("utf-8").split(" has played")[0] for obj in decode(frame)]
 
+    # This method processes the detected QR codes and writes the thinking time to the InfluxDB.
     def process_qrcode(self, detected_qrcodes):
         for qrcode in detected_qrcodes:
             if qrcode not in self.qrcodes_set:
@@ -49,19 +56,8 @@ class RealTimeApp:
                 point = Point("thinking_time").tag("player", qrcode).field("elapsed_time", elapsed_time)
                 self.write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point.to_line_protocol())
 
-    def process_frame(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            return False
-
-        detect_result = self.model(frame)
-        detected_cards_indices = detect_result[0].boxes.cls.tolist()
-        detected_cards = [detect_result[0].names[i] for i in detected_cards_indices]
-
-        detect_image = detect_result[0].plot()
-        detected_qrcodes = self.detect_players(frame)
-        self.process_qrcode(detected_qrcodes)
-
+    # This method processes the detected cards and writes the detection time to the InfluxDB.
+    def process_card_detection(self, detected_cards):
         for card in self.cards_set:
             if card in detected_cards and card not in self.detected_cards_set:
                 if self.last_detected_card == card:
@@ -74,9 +70,25 @@ class RealTimeApp:
                 else:
                     self.last_detected_card = card
 
+    # This method processes a single frame, detects the cards and QR codes, and displays the detection result.
+    def process_frame(self):
+        ret, frame = self.cap.read()
+        if not ret:
+            return False
+
+        detect_result = self.model(frame)
+        detected_cards_indices = detect_result[0].boxes.cls.tolist()
+        detected_cards = [detect_result[0].names[i] for i in detected_cards_indices]
+
+        detect_image = detect_result[0].plot()
+        detected_qrcodes = self.detect_players(frame)
+        self.process_qrcode(detected_qrcodes)
+        self.process_card_detection(detected_cards)
+
         cv2.imshow('Card Detection', detect_image)
         return True
 
+    # This method runs the real-time card detection application.
     def run(self):
         while True:
             if not self.process_frame() or cv2.waitKey(1) & 0xFF == ord('q'):
