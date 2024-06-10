@@ -9,6 +9,8 @@ from ultralytics import YOLO
 
 class RealTimeApp:
     def __init__(self):
+        self.cards_set = ['1a', '2a', '3a', '4a', '5a', '1b', '2b', '3b', '4b', '5b', '1o', '2o', '3o', '4o', '5o',
+                          '1p', '2p', '3p', '4p', '5p']
         self.write_api = self.initialize_influxdb()
         self.cap = self.initialize_video_capture()
         self.model = self.initialize_yolo_model()
@@ -59,12 +61,13 @@ class RealTimeApp:
         detected_qrcodes = self.detect_players(frame)
         self.process_qrcode(detected_qrcodes)
 
-        if '2p' in detected_cards and '2p' not in self.detected_cards_set:
-            self.detected_cards_set.add('2p')
-            elapsed_time = time.time() - self.script_start_time
-            print(f"Card '2p' has been detected after {elapsed_time} seconds.")
-            point = Point("card_detection").tag("card", '2p').field("elapsed_time", elapsed_time)
-            self.write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point.to_line_protocol())
+        for card in self.cards_set:
+            if card in detected_cards and card not in self.detected_cards_set:
+                self.detected_cards_set.add(card)
+                elapsed_time = time.time() - self.script_start_time
+                print(f"Card '{card}' has been detected after {elapsed_time} seconds.")
+                point = Point("card_detection").tag("card", card).field("elapsed_time", elapsed_time)
+                self.write_api.write(bucket="StrategicFruitsData", org="Cris&Matt", record=point.to_line_protocol())
 
         cv2.imshow('Card Detection', detect_image)
         return True
