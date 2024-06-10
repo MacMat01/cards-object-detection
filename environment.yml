@@ -22,4 +22,6 @@ dependencies:
   - tqdm
   - requests
   - pyzbar
+  - influxdb
+  - influxdb-client
   - pip
