@@ -7,7 +7,7 @@ from influxdb_client import InfluxDBClient
 class QueryAPI:
     # The constructor initializes the InfluxDB client and the query API.
     def __init__(self):
-        self.client = InfluxDBClient(url="http://localhost:8086", token=os.getenv("INFLUXDB_TOKEN"), org="Cris&Matt")
+        self.client = InfluxDBClient(url="https://us-east-1-1.aws.cloud2.influxdata.com", token=os.getenv("INFLUXDB_TOKEN"), org="Cris-and-Matt")
         self.query_api = self.client.query_api()
 
     # This method processes the thinking time records and prints the player name and thinking time.

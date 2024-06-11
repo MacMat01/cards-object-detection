@@ -24,7 +24,7 @@ class RealTimeApp:
     # This method initializes the InfluxDB client and returns the write API.
     @staticmethod
     def initialize_influxdb():
-        client = InfluxDBClient(url="http://localhost:8086", token=os.getenv("INFLUXDB_TOKEN"), org="Cris&Matt")
+        client = InfluxDBClient(url="https://us-east-1-1.aws.cloud2.influxdata.com", token=os.getenv("INFLUXDB_TOKEN"), org="Cris-and-Matt")
         return client.write_api()
 
     # This method initializes the video capture object and sets the resolution.
