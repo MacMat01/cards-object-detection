@@ -7,8 +7,9 @@ from hull import findHull
 # Test find_hull on a random card image
 # debug = "no" or "pause_always" or "pause_on_pb"
 # If debug!="no", you may have to press a key to continue execution after pause
+HOME = os.getcwd()
 debug = "no"
-imgs_dir = "data/cards"
+imgs_dir = os.path.join(HOME, 'data','cards')
 imgs_fns = glob(imgs_dir + "/*/*.png")
 img_fn = random.choice(imgs_fns)
 print(img_fn)
