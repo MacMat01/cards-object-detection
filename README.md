@@ -1,5 +1,7 @@
 # Cards Object Detection
 
+[![CodeQL](https://github.com/MacMat01/cards-object-detection/actions/workflows/codeql.yml/badge.svg)](https://github.com/MacMat01/cards-object-detection/actions/workflows/codeql.yml)
+
 This project aims to detect strategic fruits cards using YOLOv8. It is implemented in Python and uses several libraries
 for data processing and model training.
 
