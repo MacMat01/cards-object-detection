@@ -87,7 +87,7 @@ cd src/main/python/app
 ```
 
 ```bash
-python real_time_app.py
+python card_detection_app.py
 python video_app.py
 ```
 
