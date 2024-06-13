@@ -20,13 +20,11 @@ class RealTimeApp:
         self.write_api = self.initialize_influxdb()
         self.cap = self.initialize_video_capture()
         self.model = self.initialize_yolo_model()
-        self.script_start_time = time.time()
-        self.qrcodes_set = set()
-        self.detected_cards_set = set()
-        self.NUMBER_OF_CARDS = 4
+        self.script_start_time = time.time()  # Not used. Maybe related to Thinking Time issues
         self.round_number = 1
         self.players = []
         self.cards = []
+        self.LONG_PHASE_ROUNDS = 2
         print(f"Round {self.round_number} starting.")
 
     def increment_round(self):
@@ -65,12 +63,16 @@ class RealTimeApp:
     def detect_players(frame):
         return [obj.data.decode("utf-8").split(" has played")[0] for obj in decode(frame)]
 
-    # This method processes the detected QR codes and writes the thinking time to the InfluxDB.
     def process_qrcode(self, detected_qrcodes):
         for qrcode in detected_qrcodes:
             if qrcode not in [player for player, _ in self.players]:
                 self.players.append((qrcode, time.time()))
                 print(f"{qrcode} has played.")
+
+    def add_card_to_played(self, card):
+        if self.last_detected_card_count > 6 and card not in self.cards:
+            self.cards.append(card)
+            print(f"Card '{card}' was played.")
 
     def increment_card_count(self, card):
         if card == self.last_detected_card:
@@ -79,11 +81,6 @@ class RealTimeApp:
             self.last_detected_card = card
             self.last_detected_card_count = 1
 
-    def add_card_to_played(self, card):
-        if self.last_detected_card_count > 10 and card not in self.cards:
-            self.cards.append(card)
-            print(f"Card '{card}' was played.")
-
     def detect_card_played(self, detected_cards):
         for card in self.cards_set:
             if card in detected_cards and card not in self.cards:
@@ -91,13 +88,26 @@ class RealTimeApp:
                 self.add_card_to_played(card)
 
     def check_round_end(self):
-        if len(self.cards) == self.NUMBER_OF_CARDS:
-            print(f"Round {self.round_number} ended and starting 10 seconds delay")
-            time.sleep(10)
-            print(f"10 seconds delay ended and starting {self.round_number + 1} round.")
-            self.clear_players()
-            self.clear_cards()
-            self.increment_round()
+        if (self.round_number <= self.LONG_PHASE_ROUNDS and len(self.cards) == 4) or (
+                self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 8):
+            self.end_round()
+
+    def end_round(self):
+        print(f"Round {self.round_number} ended and starting 10 seconds delay")
+        time.sleep(10)
+        print(f"10 seconds delay ended and starting {self.round_number + 1} round.")
+        matched_players_cards = self.write_to_influxdb()
+        for player, player_time, card in matched_players_cards:
+            self.players.remove((player, player_time))
+            self.cards.remove(card)
+            elapsed_time = time.time() - player_time
+            point = Point("game").tag("player", player).tag("card", card).field("thinking_time", elapsed_time)
+            print(f"Writing to InfluxDB: {point.to_line_protocol()}")
+            self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt", record=point.to_line_protocol())
+        self.cards.clear()
+        self.increment_round()
+        if self.round_number > self.LONG_PHASE_ROUNDS:
+            self.players.clear()
 
     def process_card_detection(self, detected_cards):
         self.detect_card_played(detected_cards)
@@ -114,17 +124,14 @@ class RealTimeApp:
         self.process_card_detection(detected_cards)
 
     def write_to_influxdb(self):
-        for player, player_time in self.players[:]:
-            for card in self.cards[:]:
-                if player[0].lower() == card[-1].lower():
-                    self.players.remove((player, player_time))
-                    self.cards.remove(card)
-                    elapsed_time = time.time() - player_time
-                    point = Point("game").tag("player", player).tag("card", card).field("thinking_time", elapsed_time)
-                    print(f"Writing to InfluxDB: {point.to_line_protocol()}")
-                    self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt",
-                                         record=point.to_line_protocol())
+        matched_players_cards = []
+        for player, player_time in self.players:
+            for card in self.cards:
+                if player[0].lower() == card[-1].lower() and (player, player_time, card) not in matched_players_cards:
+                    matched_players_cards.append((player, player_time, card))
+                    print(f"Matched: Player '{player}' with Card '{card}'")
                     break
+        return matched_players_cards
 
     def process_frame(self):
         ret, frame = self.cap.read()
@@ -132,10 +139,11 @@ class RealTimeApp:
             return False
 
         self.detect_and_process_qrcodes(frame)
+        detect_result = self.model(frame)
+        detect_image = detect_result[0].plot()
         self.detect_and_process_cards(frame)
-        self.write_to_influxdb()
-        
-        cv2.imshow('Card Detection', frame)
+
+        cv2.imshow('Card Detection', detect_image)
 
         return True
 
