@@ -87,9 +87,6 @@ class RealTimeApp:
                 self.add_card_to_played(card)
 
     def check_round_end(self):
-        # if len(self.cards) == 4 and len(self.players) == 4:
-        #     self.players.clear()
-
         if self.round_number <= self.LONG_PHASE_ROUNDS and len(self.cards) == 4:
             self.end_round()
         elif self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 8:
