@@ -42,8 +42,7 @@ class CardDetectionApp:
         self.first_phase_rounds = 12
         self.round_number = 1
         print(f"Round {self.round_number} starting.")
-        self.current_time = time.time()
-        
+        self.start_time = time.time()
 
     def get_elapsed_time(self):
         """
@@ -52,7 +51,11 @@ class CardDetectionApp:
         Returns:
             float: The elapsed time since the last move.
         """
-        return self.current_time - time.time()
+
+        end_time = time.time()
+        elapsed_time = end_time - self.start_time
+        print(f"Elapsed time: {elapsed_time}")
+        return self.start_time - end_time
 
     def increment_round(self):
         """
@@ -86,13 +89,12 @@ class CardDetectionApp:
                 self.player_manager.players_second_set.remove((player, player_time))
             if card in self.card_manager.cards:
                 self.card_manager.cards.remove(card)
-            elapsed_time = time.time() - player_time
-            self.influxdb_manager.write_to_influxdb(player, card, elapsed_time)
+            self.influxdb_manager.write_to_influxdb(player, card, player_time)
         self.player_manager.players_first_set.clear()
         self.player_manager.players_second_set.clear()
         self.card_manager.cards.clear()
         self.increment_round()
-        self.current_time = time.time()
+        self.start_time = time.time()
 
     def process_card_detection(self, detected_cards):
         """
