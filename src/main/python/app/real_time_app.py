@@ -23,6 +23,7 @@ class RealTimeApp:
         self.script_start_time = time.time()  # Not used. Maybe related to Thinking Time issues
         self.round_number = 1
         self.players = []
+        self.players2 = []
         self.cards = []
         self.LONG_PHASE_ROUNDS = 2
         print(f"Round {self.round_number} starting.")
@@ -30,12 +31,6 @@ class RealTimeApp:
     def increment_round(self):
         self.round_number += 1
         print(f"Round {self.round_number} starting.")
-
-    def clear_players(self):
-        self.players.clear()
-
-    def clear_cards(self):
-        self.cards.clear()
 
     # This method initializes the InfluxDB client and returns the write API.
     @staticmethod
@@ -65,8 +60,12 @@ class RealTimeApp:
 
     def process_qrcode(self, detected_qrcodes):
         for qrcode in detected_qrcodes:
-            if qrcode not in [player for player, _ in self.players]:
+            if not any(player == qrcode for player, _ in self.players):
                 self.players.append((qrcode, time.time()))
+                print(f"{qrcode} has played.")
+            if not any(player == qrcode for player, _ in
+                       self.players2) and self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 4:
+                self.players2.append((qrcode, time.time()))
                 print(f"{qrcode} has played.")
 
     def add_card_to_played(self, card):
@@ -88,8 +87,12 @@ class RealTimeApp:
                 self.add_card_to_played(card)
 
     def check_round_end(self):
-        if (self.round_number <= self.LONG_PHASE_ROUNDS and len(self.cards) == 4) or (
-                self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 8):
+        # if len(self.cards) == 4 and len(self.players) == 4:
+        #     self.players.clear()
+
+        if self.round_number <= self.LONG_PHASE_ROUNDS and len(self.cards) == 4:
+            self.end_round()
+        elif self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 8:
             self.end_round()
 
     def end_round(self):
@@ -98,16 +101,20 @@ class RealTimeApp:
         print(f"10 seconds delay ended and starting {self.round_number + 1} round.")
         matched_players_cards = self.write_to_influxdb()
         for player, player_time, card in matched_players_cards:
-            self.players.remove((player, player_time))
-            self.cards.remove(card)
+            if (player, player_time) in self.players:
+                self.players.remove((player, player_time))
+            else:
+                self.players2.remove((player, player_time))
+            if card in self.cards:
+                self.cards.remove(card)
             elapsed_time = time.time() - player_time
             point = Point("game").tag("player", player).tag("card", card).field("thinking_time", elapsed_time)
             print(f"Writing to InfluxDB: {point.to_line_protocol()}")
             self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt", record=point.to_line_protocol())
+        self.players.clear()
+        self.players2.clear()
         self.cards.clear()
         self.increment_round()
-        if self.round_number > self.LONG_PHASE_ROUNDS:
-            self.players.clear()
 
     def process_card_detection(self, detected_cards):
         self.detect_card_played(detected_cards)
@@ -124,13 +131,18 @@ class RealTimeApp:
         self.process_card_detection(detected_cards)
 
     def write_to_influxdb(self):
+        def match_players_cards(players):
+            for player, player_time in players:
+                for card in self.cards:
+                    if player[0].lower() == card[-1].lower() and (
+                            player, player_time, card) not in matched_players_cards:
+                        matched_players_cards.append((player, player_time, card))
+                        print(f"Matched: Player '{player}' with Card '{card}'")
+                        break
+
         matched_players_cards = []
-        for player, player_time in self.players:
-            for card in self.cards:
-                if player[0].lower() == card[-1].lower() and (player, player_time, card) not in matched_players_cards:
-                    matched_players_cards.append((player, player_time, card))
-                    print(f"Matched: Player '{player}' with Card '{card}'")
-                    break
+        match_players_cards(self.players)
+        match_players_cards(self.players2)
         return matched_players_cards
 
     def process_frame(self):
