@@ -37,11 +37,22 @@ class CardDetectionApp:
         self.influxdb_manager = InfluxDBManager()
         self.video_capture_manager = VideoCaptureManager(video_file)
         self.yolo_model_manager = YOLOModelManager()
-        self.player_manager = PlayerManager()
+        self.player_manager = PlayerManager(self)
         self.card_manager = CardManager()
-        self.first_phase_rounds = 2
+        self.first_phase_rounds = 12
         self.round_number = 1
         print(f"Round {self.round_number} starting.")
+        self.current_time = time.time()
+        
+
+    def get_elapsed_time(self):
+        """
+        Returns the elapsed time since the last move.
+        
+        Returns:
+            float: The elapsed time since the last move.
+        """
+        return self.current_time - time.time()
 
     def increment_round(self):
         """
@@ -81,6 +92,7 @@ class CardDetectionApp:
         self.player_manager.players_second_set.clear()
         self.card_manager.cards.clear()
         self.increment_round()
+        self.current_time = time.time()
 
     def process_card_detection(self, detected_cards):
         """
@@ -179,9 +191,7 @@ class CardDetectionApp:
         Returns:
             list: List of detected player identifiers.
         """
-        qrcodes = decode(frame)
-        detected_players = [qrcode.data.decode('utf-8') for qrcode in qrcodes]
-        return detected_players
+        return [obj.data.decode("utf-8").split(" has played")[0] for obj in decode(frame)]
 
 
 if __name__ == "__main__":
