@@ -8,6 +8,7 @@ from pyzbar.pyzbar import decode
 from ultralytics import YOLO
 
 logging.getLogger('ultralytics').setLevel(logging.ERROR)
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 class RealTimeApp:
@@ -48,7 +49,7 @@ class RealTimeApp:
     # This method initializes the video capture object and sets the resolution.
     @staticmethod
     def initialize_video_capture():
-        cap = cv2.VideoCapture(1)
+        cap = cv2.VideoCapture(0)
         cap.set(3, 1280)
         cap.set(4, 720)
         return cap
@@ -133,6 +134,8 @@ class RealTimeApp:
         self.detect_and_process_qrcodes(frame)
         self.detect_and_process_cards(frame)
         self.write_to_influxdb()
+        
+        cv2.imshow('Card Detection', frame)
 
         return True
 
