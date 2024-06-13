@@ -30,7 +30,7 @@ class InfluxDBManager:
                                      token=os.getenv("INFLUXDB_TOKEN"), org="Cris-and-Matt")
         self.write_api = self.client.write_api()
 
-    def write_to_influxdb(self, player, card, elapsed_time):
+    def write_to_influxdb(self, player, card, elapsed_time, round_number):
         """
         Writes the player, card, and elapsed time data to InfluxDB.
 
@@ -45,6 +45,15 @@ class InfluxDBManager:
         elapsed_time : float
             The time elapsed since the player's last move.
         """
-        point = Point("game").tag("player", player).tag("card", card).field("thinking_time", elapsed_time)
+        if round_number <= 12:
+            phase = 1
+        elif 13 <= round_number <= 18:
+            phase = 2
+        else:
+            phase = 3
+
+        point = Point("game").tag("Phase", phase).tag("Round", round_number).tag("player", player).tag("card",
+                                                                                                       card).field(
+            "thinking_time", elapsed_time)
         print(f"Writing to InfluxDB: {point.to_line_protocol()}")
         self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt", record=point.to_line_protocol())
