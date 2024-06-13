@@ -25,7 +25,7 @@ class RealTimeApp:
         self.players = []
         self.players2 = []
         self.cards = []
-        self.LONG_PHASE_ROUNDS = 2
+        self.first_phase_rounds = 2
         print(f"Round {self.round_number} starting.")
 
     def increment_round(self):
@@ -64,7 +64,7 @@ class RealTimeApp:
                 self.players.append((qrcode, time.time()))
                 print(f"{qrcode} has played.")
             if not any(player == qrcode for player, _ in
-                       self.players2) and self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 4:
+                       self.players2) and self.round_number > self.first_phase_rounds and len(self.cards) == 4:
                 self.players2.append((qrcode, time.time()))
                 print(f"{qrcode} has played.")
 
@@ -87,9 +87,9 @@ class RealTimeApp:
                 self.add_card_to_played(card)
 
     def check_round_end(self):
-        if self.round_number <= self.LONG_PHASE_ROUNDS and len(self.cards) == 4:
+        if self.round_number <= self.first_phase_rounds and len(self.cards) == 4:
             self.end_round()
-        elif self.round_number > self.LONG_PHASE_ROUNDS and len(self.cards) == 8:
+        elif self.round_number > self.first_phase_rounds and len(self.cards) == 8:
             self.end_round()
 
     def end_round(self):
