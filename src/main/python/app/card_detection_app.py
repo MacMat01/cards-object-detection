@@ -50,7 +50,7 @@ class CardDetectionApp:
     def get_elapsed_time(self):
         """
         Returns the elapsed time since the last move.
-        
+
         Returns:
             float: The elapsed time since the last move.
         """
@@ -58,7 +58,7 @@ class CardDetectionApp:
         end_time = time.time()
         elapsed_time = end_time - self.start_time
         print(f"Elapsed time: {elapsed_time}")
-        return self.start_time - end_time
+        return elapsed_time
 
     def increment_round(self):
         """
