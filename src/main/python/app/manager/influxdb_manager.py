@@ -30,7 +30,7 @@ class InfluxDBManager:
                                      token=os.getenv("INFLUXDB_TOKEN"), org="Cris-and-Matt")
         self.write_api = self.client.write_api()
 
-    def write_to_influxdb(self, player, card, elapsed_time, round_number):
+    def write_to_influxdb(self, player, card, elapsed_time, round_number, current_matchups):
         """
         Writes the player, card, and elapsed time data to InfluxDB.
 
@@ -44,7 +44,12 @@ class InfluxDBManager:
             The card that was played.
         elapsed_time : float
             The time elapsed since the player's last move.
+        round_number : int
+            The current round number.
+        current_matchups : list
+            The current matchups between players.
         """
+        vs = None
         if round_number <= 12:
             phase = 1
         elif 13 <= round_number <= 18:
@@ -52,8 +57,14 @@ class InfluxDBManager:
         else:
             phase = 3
 
+        for matchup in current_matchups:
+            if player in matchup:
+                vs = matchup[0] if matchup[1] == player else matchup[1]
+                break
+
         point = Point("game").tag("Phase", phase).tag("Round", round_number).tag("player", player).tag("card",
-                                                                                                       card).field(
+                                                                                                       card).tag("vs",
+                                                                                                                 vs).field(
             "thinking_time", elapsed_time)
         print(f"Writing to InfluxDB: {point.to_line_protocol()}")
         self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt", record=point.to_line_protocol())

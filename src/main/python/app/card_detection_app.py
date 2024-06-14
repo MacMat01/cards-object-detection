@@ -34,6 +34,7 @@ class CardDetectionApp:
         Args:
             video_file (str, optional): Path to the video file. If None, captures from camera.
         """
+        self.current_matchups = None
         self.influxdb_manager = InfluxDBManager()
         self.video_capture_manager = VideoCaptureManager(video_file)
         self.yolo_model_manager = YOLOModelManager()
@@ -62,7 +63,9 @@ class CardDetectionApp:
         Increments the round number and prints the new round number.
         """
         self.round_number += 1
+        self.setup_round_robin()
         print(f"Round {self.round_number} starting.")
+        print(f"Matchups: {self.current_matchups}")
 
     def check_round_end(self):
         """
@@ -89,7 +92,7 @@ class CardDetectionApp:
                 self.player_manager.players_second_set.remove((player, player_time))
             if card in self.card_manager.cards:
                 self.card_manager.cards.remove(card)
-            self.influxdb_manager.write_to_influxdb(player, card, player_time)
+            self.influxdb_manager.write_to_influxdb(player, card, player_time, self.round_number, self.current_matchups)
         self.player_manager.players_first_set.clear()
         self.player_manager.players_second_set.clear()
         self.card_manager.cards.clear()
@@ -194,6 +197,19 @@ class CardDetectionApp:
             list: List of detected player identifiers.
         """
         return [obj.data.decode("utf-8").split(" has played")[0] for obj in decode(frame)]
+
+    def setup_round_robin(self):
+        """
+        Sets up the matchups for the round-robin tournament.
+        """
+        matchups = {1: [("Apple", "Pear"), ("Orange", "Banana")], 2: [("Apple", "Banana"), ("Orange", "Pear")],
+                    3: [("Pear", "Banana"), ("Orange", "Apple")], }
+
+        round_number = self.round_number % 3
+        if round_number == 0:
+            round_number = 3
+
+        self.current_matchups = matchups[round_number]
 
 
 if __name__ == "__main__":
