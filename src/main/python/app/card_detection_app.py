@@ -42,6 +42,8 @@ class CardDetectionApp:
         self.card_manager = CardManager()
         self.first_phase_rounds = 12
         self.round_number = 1
+        self.player_detected = False
+        self.cards_detected = True
         self.setup_round_robin()
         print(f"Round {self.round_number} starting.")
         print(f"Matchups: {self.current_matchups}")
@@ -74,9 +76,11 @@ class CardDetectionApp:
         Checks if the current round should end based on the number of detected cards,
         and ends the round if necessary.
         """
-        if self.round_number <= self.first_phase_rounds and len(self.card_manager.cards) == 4:
+        if self.round_number <= self.first_phase_rounds and len(
+                self.card_manager.cards) == 4 and self.player_detected and not self.cards_detected:
             self.end_round()
-        elif self.round_number > self.first_phase_rounds and len(self.card_manager.cards) == 8:
+        elif self.round_number > self.first_phase_rounds and len(
+                self.card_manager.cards) == 8 and self.player_detected and not self.cards_detected:
             self.end_round()
 
     def end_round(self):
@@ -84,7 +88,7 @@ class CardDetectionApp:
         Ends the current round, processes data, clears sets, and starts a new round after a delay.
         """
         print(f"Round {self.round_number} ended and starting 10 seconds delay")
-        time.sleep(10)
+        # time.sleep(10)
         print(f"10 seconds delay ended and starting {self.round_number + 1} round.")
         matched_players_cards = self.write_to_influxdb()
         for player, player_time, card in matched_players_cards:
@@ -171,6 +175,17 @@ class CardDetectionApp:
         detect_result = self.yolo_model_manager.detect_objects(frame)
         detect_image = detect_result[0].plot()
         self.detect_and_process_cards(frame)
+
+        detect_players = self.detect_players(frame)
+        if detect_players:
+            self.player_detected = True
+
+        detected_cards_indices = detect_result[0].boxes.cls.tolist()
+        detected_cards = [detect_result[0].names[i] for i in detected_cards_indices]
+        if not detected_cards:
+            self.cards_detected = False
+        else:
+            self.cards_detected = True
 
         cv2.imshow('Card Detection', detect_image)
 
