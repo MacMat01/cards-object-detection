@@ -10,6 +10,10 @@ The project has the following structure:
 - `src/`: Contains the source code of the project.
   - `main/python/`: Contains the Python scripts for the project.
     - `app/`: Contains the scripts for the real-time application.
+      - `card_detection_app.py`: Main application script for card detection.
+      - `manager/`: Contains the manager classes for the application.
+        - `influxdb_manager.py`: Manages interactions with InfluxDB.
+        - `player_manager.py`: Manages player interactions.
     - `dataset_creation/`: Contains the scripts for creating the dataset.
     - `model_training/`: Contains the scripts for training the YOLOv8 model.
 - `environment.yml`: Contains the conda environment configuration.
