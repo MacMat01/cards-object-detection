@@ -42,7 +42,9 @@ class CardDetectionApp:
         self.card_manager = CardManager()
         self.first_phase_rounds = 12
         self.round_number = 1
+        self.setup_round_robin()
         print(f"Round {self.round_number} starting.")
+        print(f"Matchups: {self.current_matchups}")
         self.start_time = time.time()
 
     def get_elapsed_time(self):
