@@ -97,6 +97,17 @@ For the On Demand application, run the following command:
 python on_demand_app.py
 ```
 
+
+#### For Using the Data Extraction Application
+
+If you want to use the data extraction application with the cards object detection, please switch to the `data-extraction/main` branch:
+
+```bash
+git checkout data-extraction/main
+```
+
+Then, follow the instructions in the `README.md` file in the `data-extraction/main` branch.
+
 #### For Creating Your Own Card Detection
 
 Follow the instruction in the following Jupyter notebooks:
