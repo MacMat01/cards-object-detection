@@ -6,7 +6,7 @@
     ----------
     cards_set : list
         a list of all possible cards that can be played in the game.
-    cards : list
+    cards_first_set : list
         a list of cards that have been played so far.
     last_detected_card : str
         the last detected card.
@@ -32,16 +32,21 @@
         """
         self.cards_set = ['1a', '2a', '3a', '4a', '5a', '1b', '2b', '3b', '4b', '5b', '1o', '2o', '3o', '4o', '5o',
                           '1p', '2p', '3p', '4p', '5p']
-        self.cards = []
+        self.cards_first_set = []
+        self.cards_second_set = []
         self.detected_cards_counts = {}
 
     def increment_card_count(self, card):
         self.detected_cards_counts[card] = self.detected_cards_counts.get(card, 0) + 1
 
     def add_card_to_played(self, card):
-        if self.detected_cards_counts.get(card, 0) > 6 and card not in self.cards:
-            self.cards.append(card)
-            print(f"Card '{card}' was played.")
+        if self.detected_cards_counts.get(card, 0) > 10:
+            if card not in self.cards_first_set and len(self.cards_first_set) < 4:
+                self.cards_first_set.append(card)
+                print(f"Card '{card}' was played.")
+            elif card not in self.cards_second_set and len(self.cards_first_set) >= 4:
+                self.cards_second_set.append(card)
+                print(f"Card '{card}' was played.")
 
     def detect_card_played(self, detected_cards):
         """
@@ -53,12 +58,12 @@
             The list of detected cards.
         """
         for card in self.cards_set:
-            if card in detected_cards and card not in self.cards:
+            if card in detected_cards and card not in self.cards_first_set:
                 self.increment_card_count(card)
                 self.add_card_to_played(card)
 
         # Check if 16 indexes are detected by YOLO
-        if len(detected_cards) == 16 and len(self.cards) < 8:
+        if len(detected_cards) == 16 and len(self.cards_first_set + self.cards_second_set) < 8:
             self.duplicate_cards()
 
     def duplicate_cards(self):
@@ -67,7 +72,7 @@
         """
         # Create a dictionary to count the occurrences of each letter after the number
         letter_counts = {}
-        for card in self.cards:
+        for card in self.cards_first_set + self.cards_second_set:
             letter = card[-1]
             if letter in letter_counts:
                 letter_counts[letter] += 1
@@ -75,10 +80,10 @@
                 letter_counts[letter] = 1
 
         # Duplicate the cards whose letter after the number does not appear twice
-        for card in self.cards:
+        for card in self.cards_first_set + self.cards_second_set:
             letter = card[-1]
             number = card[:-1]
             if letter_counts.get(letter, 0) < 2:
-                self.cards.append(number + letter)
+                self.cards_second_set.append(number + letter)
                 print(f"Card '{number + letter}' was duplicated.")
                 break

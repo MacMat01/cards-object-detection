@@ -77,31 +77,30 @@ class CardDetectionApp:
         and ends the round if necessary.
         """
         if self.round_number <= self.first_phase_rounds and len(
-                self.card_manager.cards) == 4 and self.player_detected and not self.cards_detected:
+                self.card_manager.cards_first_set) == 4 and self.player_detected and not self.cards_detected:
             self.end_round()
         elif self.round_number > self.first_phase_rounds and len(
-                self.card_manager.cards) == 8 and self.player_detected and not self.cards_detected:
+                self.card_manager.cards_second_set) == 4 and self.player_detected and not self.cards_detected:
             self.end_round()
 
     def end_round(self):
         """
-        Ends the current round, processes data, clears sets, and starts a new round after a delay.
+        Ends the current round, processes data, clears sets, and starts a new round.
         """
-        print(f"Round {self.round_number} ended and starting 10 seconds delay")
-        # time.sleep(10)
-        print(f"10 seconds delay ended and starting {self.round_number + 1} round.")
+        print(f"Round {self.round_number} ended")
         matched_players_cards = self.write_to_influxdb()
         for player, player_time, card in matched_players_cards:
             if (player, player_time) in self.player_manager.players_first_set:
                 self.player_manager.players_first_set.remove((player, player_time))
             else:
                 self.player_manager.players_second_set.remove((player, player_time))
-            if card in self.card_manager.cards:
-                self.card_manager.cards.remove(card)
+            if card in self.card_manager.cards_first_set:
+                self.card_manager.cards_first_set.remove(card)
             self.influxdb_manager.write_to_influxdb(player, card, player_time, self.round_number, self.current_matchups)
         self.player_manager.players_first_set.clear()
         self.player_manager.players_second_set.clear()
-        self.card_manager.cards.clear()
+        self.card_manager.cards_first_set.clear()
+        self.card_manager.cards_second_set.clear()
         self.increment_round()
         self.start_time = time.time()
 
@@ -123,7 +122,7 @@ class CardDetectionApp:
             frame (ndarray): The video frame to process.
         """
         detected_qrcodes = self.detect_players(frame)
-        self.player_manager.process_qrcode(detected_qrcodes, self.round_number, self.card_manager.cards,
+        self.player_manager.process_qrcode(detected_qrcodes, self.round_number, self.card_manager.cards_first_set,
                                            self.first_phase_rounds)
 
     def detect_and_process_cards(self, frame):
@@ -148,12 +147,20 @@ class CardDetectionApp:
 
         def match_players_cards(players):
             for player, player_time in players:
-                for card in self.card_manager.cards:
-                    if player[0].lower() == card[-1].lower() and (
-                            player, player_time, card) not in matched_players_cards:
-                        matched_players_cards.append((player, player_time, card))
-                        print(f"Matched: Player '{player}' with Card '{card}'")
-                        break
+                if (players == self.player_manager.players_first_set):
+                    for card in self.card_manager.cards_first_set:
+                        if player[0].lower() == card[-1].lower() and (
+                                player, player_time, card) not in matched_players_cards:
+                            matched_players_cards.append((player, player_time, card))
+                            print(f"Matched: Player '{player}' with Card '{card}'")
+                            break
+                elif (players == self.player_manager.players_second_set):
+                    for card in self.card_manager.cards_second_set:
+                        if player[0].lower() == card[-1].lower() and (
+                                player, player_time, card) not in matched_players_cards:
+                            matched_players_cards.append((player, player_time, card))
+                            print(f"Matched: Player '{player}' with Card '{card}'")
+                            break
 
         matched_players_cards = []
         match_players_cards(self.player_manager.players_first_set)
