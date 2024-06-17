@@ -67,7 +67,7 @@
     def detect_card_played(self, detected_cards):
         """
         Detects if a card from the set of possible cards has been played and updates the list of played cards accordingly.
-
+    
         Parameters
         ----------
         detected_cards : list
@@ -77,3 +77,29 @@
             if card in detected_cards and card not in self.cards:
                 self.increment_card_count(card)
                 self.add_card_to_played(card)
+
+        # Check if 16 indexes are detected by YOLO
+        if len(detected_cards) == 16 and len(self.cards) < 8:
+            self.duplicate_cards()
+
+    def duplicate_cards(self):
+        """
+        Duplicates the cards whose letter after the number does not appear twice.
+        """
+        # Create a dictionary to count the occurrences of each letter after the number
+        letter_counts = {}
+        for card in self.cards:
+            letter = card[-1]
+            if letter in letter_counts:
+                letter_counts[letter] += 1
+            else:
+                letter_counts[letter] = 1
+
+        # Duplicate the cards whose letter after the number does not appear twice
+        for card in self.cards:
+            letter = card[-1]
+            number = card[:-1]
+            if letter_counts.get(letter, 0) < 2:
+                self.cards.append(number + letter)
+                print(f"Card '{number + letter}' was duplicated.")
+                break
