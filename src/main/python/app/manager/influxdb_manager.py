@@ -65,9 +65,9 @@ class InfluxDBManager:
         # Remove non-digit characters from the card string
         card = ''.join(c for c in card if c.isdigit())
 
-        point = Point("game").tag("Phase", phase).tag("Round", round_number).tag("player", player).tag("card",
-                                                                                                       card).tag("vs",
+        point = Point("Game").tag("Phase", phase).tag("Round", round_number).tag("Player", player).tag("Card",
+                                                                                                       card).tag("VS",
                                                                                                                  vs).field(
-            "thinking_time", elapsed_time)
+            "Thinking Time", elapsed_time)
         print(f"Writing to InfluxDB: {point.to_line_protocol()}")
         self.write_api.write(bucket="StrategicFruitsData", org="Cris-and-Matt", record=point.to_line_protocol())
