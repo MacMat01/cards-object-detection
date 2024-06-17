@@ -48,7 +48,7 @@
                 self.cards_second_set.append(card)
                 print(f"Card '{card}' was played.")
 
-    def detect_card_played(self, detected_cards):
+    def detect_card_played(self, detected_cards, players_first_set):
         """
         Detects if a card from the set of possible cards has been played and updates the list of played cards accordingly.
     
@@ -56,14 +56,21 @@
         ----------
         detected_cards : list
             The list of detected cards.
+        players_first_set : list
+            The list of players who have played in the first set.
         """
+        if not players_first_set:
+            return
+
+        all_played_cards = self.cards_first_set + self.cards_second_set
+
         for card in self.cards_set:
-            if card in detected_cards and card not in self.cards_first_set:
+            if card in detected_cards and card not in all_played_cards:
                 self.increment_card_count(card)
                 self.add_card_to_played(card)
 
         # Check if 16 indexes are detected by YOLO
-        if len(detected_cards) == 16 and len(self.cards_first_set + self.cards_second_set) < 8:
+        if len(detected_cards) == 16 and len(all_played_cards) < 8:
             self.duplicate_cards()
 
     def duplicate_cards(self):

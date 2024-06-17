@@ -111,7 +111,7 @@ class CardDetectionApp:
         Args:
             detected_cards (list): List of detected cards.
         """
-        self.card_manager.detect_card_played(detected_cards)
+        self.card_manager.detect_card_played(detected_cards, self.player_manager.players_first_set)
         self.check_round_end()
 
     def detect_and_process_qrcodes(self, frame):
@@ -145,26 +145,18 @@ class CardDetectionApp:
             list: List of tuples containing matched player, player time, and card.
         """
 
-        def match_players_cards(players):
+        def match_players_cards(players, cards):
             for player, player_time in players:
-                if (players == self.player_manager.players_first_set):
-                    for card in self.card_manager.cards_first_set:
-                        if player[0].lower() == card[-1].lower() and (
-                                player, player_time, card) not in matched_players_cards:
-                            matched_players_cards.append((player, player_time, card))
-                            print(f"Matched: Player '{player}' with Card '{card}'")
-                            break
-                elif (players == self.player_manager.players_second_set):
-                    for card in self.card_manager.cards_second_set:
-                        if player[0].lower() == card[-1].lower() and (
-                                player, player_time, card) not in matched_players_cards:
-                            matched_players_cards.append((player, player_time, card))
-                            print(f"Matched: Player '{player}' with Card '{card}'")
-                            break
+                for card in cards:
+                    if player[0].lower() == card[-1].lower() and (
+                            player, player_time, card) not in matched_players_cards:
+                        matched_players_cards.append((player, player_time, card))
+                        print(f"Matched: Player '{player}' with Card '{card}'")
+                        break
 
         matched_players_cards = []
-        match_players_cards(self.player_manager.players_first_set)
-        match_players_cards(self.player_manager.players_second_set)
+        match_players_cards(self.player_manager.players_first_set, self.card_manager.cards_first_set)
+        match_players_cards(self.player_manager.players_second_set, self.card_manager.cards_second_set)
         return matched_players_cards
 
     def process_frame(self):
