@@ -100,7 +100,9 @@ class CardDetectionApp:
         self.player_manager.players_first_set.clear()
         self.player_manager.players_second_set.clear()
         self.card_manager.cards_first_set.clear()
+        print(self.card_manager.cards_first_set)
         self.card_manager.cards_second_set.clear()
+        print(self.card_manager.cards_second_set)
         self.increment_round()
         self.start_time = time.time()
 
