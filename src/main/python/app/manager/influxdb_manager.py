@@ -62,6 +62,9 @@ class InfluxDBManager:
                 vs = matchup[0] if matchup[1] == player else matchup[1]
                 break
 
+        # Remove non-digit characters from the card string
+        card = ''.join(c for c in card if c.isdigit())
+
         point = Point("game").tag("Phase", phase).tag("Round", round_number).tag("player", player).tag("card",
                                                                                                        card).tag("vs",
                                                                                                                  vs).field(
