@@ -33,34 +33,13 @@
         self.cards_set = ['1a', '2a', '3a', '4a', '5a', '1b', '2b', '3b', '4b', '5b', '1o', '2o', '3o', '4o', '5o',
                           '1p', '2p', '3p', '4p', '5p']
         self.cards = []
-        self.last_detected_card = None
-        self.last_detected_card_count = 0
+        self.detected_cards_counts = {}
 
     def increment_card_count(self, card):
-        """
-        Increments the count of the given card if it is the last detected card, or resets the count if it is a new card.
-
-        Parameters
-        ----------
-        card : str
-            The card to increment the count for.
-        """
-        if card == self.last_detected_card:
-            self.last_detected_card_count += 1
-        else:
-            self.last_detected_card = card
-            self.last_detected_card_count = 1
+        self.detected_cards_counts[card] = self.detected_cards_counts.get(card, 0) + 1
 
     def add_card_to_played(self, card):
-        """
-        Adds the given card to the list of played cards if it has been detected more than 6 times and it has not been played before.
-
-        Parameters
-        ----------
-        card : str
-            The card to add to the list of played cards.
-        """
-        if self.last_detected_card_count > 6 and card not in self.cards:
+        if self.detected_cards_counts.get(card, 0) > 6 and card not in self.cards:
             self.cards.append(card)
             print(f"Card '{card}' was played.")
 
