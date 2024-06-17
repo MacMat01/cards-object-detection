@@ -83,6 +83,10 @@ class CardDetectionApp:
                 self.card_manager.cards_second_set) == 4 and self.player_detected and not self.cards_detected:
             self.end_round()
 
+        if self.round_number > self.first_phase_rounds and self.player_detected and not self.cards_detected and len(
+                self.card_manager.cards_second_set) < 4:
+            self.card_manager.duplicate_cards()
+
     def end_round(self):
         """
         Ends the current round, processes data, clears sets, and starts a new round.
@@ -138,6 +142,7 @@ class CardDetectionApp:
         detected_cards_indices = detect_result[0].boxes.cls.tolist()
         detected_cards = [detect_result[0].names[i] for i in detected_cards_indices]
         self.process_card_detection(detected_cards)
+        self.check_round_end()
 
     def write_to_influxdb(self):
         """
@@ -175,7 +180,6 @@ class CardDetectionApp:
         self.detect_and_process_qrcodes(frame)
         detect_result = self.yolo_model_manager.detect_objects(frame)
         detect_image = detect_result[0].plot()
-        self.detect_and_process_cards(frame)
 
         detect_players = self.detect_players(frame)
         if detect_players:
@@ -188,6 +192,7 @@ class CardDetectionApp:
         else:
             self.cards_detected = True
 
+        self.detect_and_process_cards(frame)
         cv2.imshow('Card Detection', detect_image)
 
         return True

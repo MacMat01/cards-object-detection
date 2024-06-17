@@ -8,17 +8,13 @@
         a list of all possible cards that can be played in the game.
     cards_first_set : list
         a list of cards that have been played so far.
-    last_detected_card : str
-        the last detected card.
-    last_detected_card_count : int
-        the number of times the last detected card has been detected.
 
     Methods
     -------
     increment_card_count(card):
         Increments the count of the given card if it is the last detected card, or resets the count if it is a new card.
     add_card_to_played(card):
-        Adds the given card to the list of played cards if it has been detected more than 6 times and it has not been played before.
+         Add the given card to the list of played cards if it has been detected more than six times, and it has not been played before.
     detect_card_played(detected_cards):
         Detects if a card from the set of possible cards has been played and updates the list of played cards accordingly.
     """
@@ -40,7 +36,7 @@
         self.detected_cards_counts[card] = self.detected_cards_counts.get(card, 0) + 1
 
     def add_card_to_played(self, card):
-        if self.detected_cards_counts.get(card, 0) > 10:
+        if self.detected_cards_counts.get(card, 0) > 45:
             if card not in self.cards_first_set and len(self.cards_first_set) < 4:
                 self.cards_first_set.append(card)
                 print(f"Card '{card}' was played.")
@@ -63,15 +59,13 @@
             return
 
         all_played_cards = self.cards_first_set + self.cards_second_set
-
+    
         for card in self.cards_set:
             if card in detected_cards and card not in all_played_cards:
                 self.increment_card_count(card)
                 self.add_card_to_played(card)
-
-        # Check if 16 indexes are detected by YOLO
-        if len(detected_cards) == 16 and len(all_played_cards) < 8:
-            self.duplicate_cards()
+            elif card not in detected_cards and card in self.detected_cards_counts:
+                self.detected_cards_counts[card] -= 1
 
     def duplicate_cards(self):
         """

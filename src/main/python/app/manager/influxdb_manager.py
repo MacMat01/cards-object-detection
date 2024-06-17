@@ -49,13 +49,16 @@ class InfluxDBManager:
         current_matchups : list
             The current matchups between players.
         """
+        phase = None
         vs = None
-        if round_number <= 12:
+        if round_number <= 1:
             phase = 1
-        elif 13 <= round_number <= 18:
+        elif 12 <= round_number <= 18:
             phase = 2
-        else:
+        elif 18 <= round_number <= 24:
             phase = 3
+        else:
+            print("Game Over!")
 
         for matchup in current_matchups:
             if player in matchup:
