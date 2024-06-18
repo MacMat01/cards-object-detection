@@ -47,7 +47,7 @@ git clone https://github.com/MacMat01/cards-object-detection.git
 2. Navigate to the project directory:
 
 ```bash
-cd strategic-fruits-card-detection
+cd cards-object-detection
 ```
 
 3. Create a new conda environment from the `environment.yml` file:
@@ -96,14 +96,14 @@ To run the main application, navigate to the `src/main/python/app` directory and
 ```bash
 cd src/main/python/app
 ```
-For the Real Time application, run the following command:
-```bash
-python real_time_app.py
-```
 
-For the On Demand application, run the following command:
+Before running the main application, in the CardDetectionApp’s init method,
+remember to change the `video_path` to the path of the video you want to use.
+Otherwise, by default will be used the video camera
+
+For the main application, run the following command:
 ```bash
-python on_demand_app.py
+python card_detection_app.py
 ```
 
 #### For Creating Your Own Card Detection

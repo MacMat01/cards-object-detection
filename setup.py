@@ -1,6 +1,6 @@
 ﻿from setuptools import setup, find_packages
 
-setup(name='cards-object-detection', version='0.1.1-alpha', license='MIT',
+setup(name='cards-object-detection', version='1.0.0', license='MIT',
       description='A project for detecting cards using YOLOv8', author='MacMat01, SenseiBonsai2k',
       author_email='matteo.machella01@gmail.com, cristian.marinozzi1@gmail.com',
       url='https://github.com/MacMat01/cards-object-detection', packages=find_packages(),
