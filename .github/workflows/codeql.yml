@@ -9,9 +9,9 @@ name: "CodeQL"
 # 3. A scheduled event that runs every Friday at 10:44 UTC
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "data-extraction/main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master",  "data-extraction/main" ]
   schedule:
     - cron: '44 10 * * 5'
 
