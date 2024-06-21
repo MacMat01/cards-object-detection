@@ -36,7 +36,7 @@
         self.detected_cards_counts[card] = self.detected_cards_counts.get(card, 0) + 1
 
     def add_card_to_played(self, card):
-        if self.detected_cards_counts.get(card, 0) > 45:
+        if self.detected_cards_counts.get(card, 0) > 30:
             if card not in self.cards_first_set and len(self.cards_first_set) < 4:
                 self.cards_first_set.append(card)
                 print(f"Card '{card}' was played.")
@@ -64,8 +64,6 @@
             if card in detected_cards and card not in all_played_cards:
                 self.increment_card_count(card)
                 self.add_card_to_played(card)
-            elif card not in detected_cards and card in self.detected_cards_counts:
-                self.detected_cards_counts[card] -= 1
 
     def duplicate_cards(self):
         """
