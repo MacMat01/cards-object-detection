@@ -107,6 +107,7 @@ class CardDetectionApp:
         print(self.card_manager.cards_first_set)
         self.card_manager.cards_second_set.clear()
         print(self.card_manager.cards_second_set)
+        self.card_manager.detected_cards_counts.clear()
         self.increment_round()
         self.start_time = time.time()
 
